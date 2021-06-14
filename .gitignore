@@ -587,3 +587,6 @@ override.tf.json
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/python,terraform,reactnative,visualstudiocode,pycharm+all
+
+# Ignore database credentials
+cloud_sql.tfvars
