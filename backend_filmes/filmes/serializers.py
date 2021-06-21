@@ -1,6 +1,6 @@
 from rest_framework import serializers
+from rest_framework.fields import ListField
 from .models import User, Movie, UserRating
-
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,20 +9,36 @@ class UserSerializer(serializers.ModelSerializer):
             'username',
             'email',
             'age',
+            'streamings',
         )
         model = User
 
 class MovieSerializer(serializers.ModelSerializer):
+    
     class Meta:
         fields = (
-            'imdb_id',
+            'id',
+            'url',
             'title',
-            'release_year',
-            'plot',
-            'director',
-            'rotten_rating',
-            'metacritic_rating',
-            'country',
+            'runningTimeInMinutes',
+            'year',
+            'rating',
+            'ratingCount',
+            'topRank',
+            'metaScore',
+            'userScore',
+            'currentRank',
+            'genres',
+            'tmdbRating',
+            'countries',
+            'cast',
+            'significants',
+            'overview',
+            'tagline',
+            'age',
+            'originalLanguage',
+            'streamings',
+            'streamingLinks',
         )
         model = Movie
 
