@@ -2,3 +2,8 @@
 
 venv/
 .venv
+
+settings.py
+
+db.sqlite3
+settings.json
