@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from rest_framework.fields import ListField
+
 from .models import User, Movie, UserRating
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -13,8 +14,8 @@ class UserSerializer(serializers.ModelSerializer):
         )
         model = User
 
+
 class MovieSerializer(serializers.ModelSerializer):
-    
     class Meta:
         fields = (
             'id',
@@ -41,6 +42,7 @@ class MovieSerializer(serializers.ModelSerializer):
             'streamingLinks',
         )
         model = Movie
+
 
 class UserRatingSerializer(serializers.ModelSerializer):
     class Meta:

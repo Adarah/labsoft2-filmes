@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from .models import User, Movie, UserRating, StreamingService
 
 # Register your models here.

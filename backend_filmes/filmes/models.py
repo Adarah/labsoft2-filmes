@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.postgres.fields import ArrayField
+from django.db import models
 
 
 class StreamingService(models.Model):
@@ -8,6 +8,8 @@ class StreamingService(models.Model):
 
     def __str__(self):
         return self.title
+
+
 class User(models.Model):
     username = models.CharField(max_length=200, null=False, blank=False)
     email = models.CharField(max_length=200, null=False, blank=False)
@@ -17,8 +19,9 @@ class User(models.Model):
     def __str__(self):
         return self.username
 
+
 class Movie(models.Model):
-    #dados retirados da API IMDB
+    # dados retirados da API IMDB
     id = models.CharField(primary_key=True, null=False, blank=False, max_length=20)
     url = models.CharField(max_length=200, null=False, blank=False)
     title = models.CharField(max_length=200, null=False, blank=False)
@@ -31,7 +34,7 @@ class Movie(models.Model):
     userScore = models.FloatField(null=True, blank=True)
     currentRank = models.IntegerField(null=True, blank=True)
     genres = ArrayField(models.CharField(max_length=200), null=True, blank=True)
-    #dados retirados da API Streaming Results
+    # dados retirados da API Streaming Results
     tmdbRating = models.IntegerField(null=True, blank=True)
     countries = ArrayField(models.CharField(max_length=200), null=True, blank=True)
     cast = ArrayField(models.CharField(max_length=200), null=True, blank=True)
@@ -40,12 +43,13 @@ class Movie(models.Model):
     tagline = models.TextField(null=True, blank=True)
     age = models.IntegerField(null=True, blank=True)
     originalLanguage = models.CharField(max_length=200, null=True, blank=True)
-    #estes campos deve ser processados
+    # estes campos deve ser processados
     streamings = models.ManyToManyField(StreamingService, blank=True)
     streamingLinks = ArrayField(models.CharField(max_length=200), null=True, blank=True)
 
     def __str__(self):
         return self.title
+
 
 class UserRating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -53,4 +57,3 @@ class UserRating(models.Model):
     rating = models.FloatField()
     review = models.TextField()
     created_at = models.DateTimeField()
-
