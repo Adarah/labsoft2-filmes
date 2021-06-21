@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - &backend_path backend_filmes
+      - &backend_path backend_filmes/**
   pull_request:
     branches:
       - main
