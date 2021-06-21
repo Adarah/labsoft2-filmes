@@ -12,7 +12,7 @@ class User(models.Model):
     username = models.CharField(max_length=200, null=False, blank=False)
     email = models.CharField(max_length=200, null=False, blank=False)
     age = models.IntegerField()
-    streamings = models.ManyToManyField(StreamingService)
+    streamings = models.ManyToManyField(StreamingService, blank=True)
 
     def __str__(self):
         return self.username
@@ -40,8 +40,8 @@ class Movie(models.Model):
     tagline = models.TextField(null=True, blank=True)
     age = models.IntegerField(null=True, blank=True)
     originalLanguage = models.CharField(max_length=200, null=True, blank=True)
-    #estes campos deve ser processado
-    streamings = models.ManyToManyField(StreamingService)
+    #estes campos deve ser processados
+    streamings = models.ManyToManyField(StreamingService, blank=True)
     streamingLinks = ArrayField(models.CharField(max_length=200), null=True, blank=True)
 
     def __str__(self):
