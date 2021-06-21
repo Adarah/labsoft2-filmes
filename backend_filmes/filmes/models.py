@@ -1,22 +1,48 @@
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
+
+class StreamingService(models.Model):
+    title = models.CharField(max_length=200, null=False, blank=False)
+    img_url = models.TextField(max_length=200, null=False, blank=False)
+
+    def __str__(self):
+        return self.title
 class User(models.Model):
     username = models.CharField(max_length=200, null=False, blank=False)
     email = models.CharField(max_length=200, null=False, blank=False)
     age = models.IntegerField()
+    streamings = models.ManyToManyField(StreamingService)
 
     def __str__(self):
         return self.username
 
 class Movie(models.Model):
-    imdb_id = models.IntegerField(primary_key=True, null=False, blank=False)
+    #dados retirados da API IMDB
+    id = models.CharField(primary_key=True, null=False, blank=False, max_length=20)
+    url = models.CharField(max_length=200, null=False, blank=False)
     title = models.CharField(max_length=200, null=False, blank=False)
-    release_year = models.IntegerField(null=False, blank=False)
-    plot = models.TextField()
-    director = models.CharField(max_length=200, null=False, blank=False)
-    rotten_rating = models.IntegerField()
-    metacritic_rating = models.IntegerField()
-    country = models.CharField(max_length=200, null=False, blank=False)
+    runningTimeInMinutes = models.IntegerField(null=False, blank=False)
+    year = models.IntegerField(null=False, blank=False)
+    rating = models.FloatField(null=True, blank=False)
+    ratingCount = models.IntegerField(null=False, blank=False)
+    topRank = models.IntegerField(null=False, blank=False)
+    metaScore = models.IntegerField(null=True, blank=True)
+    userScore = models.FloatField(null=True, blank=True)
+    currentRank = models.IntegerField(null=True, blank=True)
+    genres = ArrayField(models.CharField(max_length=200), null=True, blank=True)
+    #dados retirados da API Streaming Results
+    tmdbRating = models.IntegerField(null=True, blank=True)
+    countries = ArrayField(models.CharField(max_length=200), null=True, blank=True)
+    cast = ArrayField(models.CharField(max_length=200), null=True, blank=True)
+    significants = ArrayField(models.CharField(max_length=200), null=True, blank=True)
+    overview = models.TextField(null=True, blank=True)
+    tagline = models.TextField(null=True, blank=True)
+    age = models.IntegerField(null=True, blank=True)
+    originalLanguage = models.CharField(max_length=200, null=True, blank=True)
+    #estes campos deve ser processado
+    streamings = models.ManyToManyField(StreamingService)
+    streamingLinks = ArrayField(models.CharField(max_length=200), null=True, blank=True)
 
     def __str__(self):
         return self.title
