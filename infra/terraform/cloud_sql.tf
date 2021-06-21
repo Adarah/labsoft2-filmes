@@ -22,8 +22,8 @@ resource "google_sql_database_instance" "instance" {
   deletion_protection = false
 }
 
-resource "google_sql_database" "database" {
-  name     = "my-database"
+resource "google_sql_database" "filmes" {
+  name     = "filmes"
   instance = google_sql_database_instance.instance.name
 }
 
