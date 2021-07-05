@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "158316275219",
+    "project_id": "labsoft2-filmes",
+    "storage_bucket": "labsoft2-filmes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:158316275219:android:52e1358e01c64df13541e6",
+        "android_client_info": {
+          "package_name": "info.adarah.filmes.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "158316275219-e6s6p9tv4u7v24ph79isia3coc7hlp5l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "info.adarah.filmes.app",
+            "certificate_hash": "5afc833649c00686fb3572f7e35148ff005b3fcb"
+          }
+        },
+        {
+          "client_id": "158316275219-fgkmmud8gl20a9p7v5msmvg1tfnogrvt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCi6mSu4U395FguVjJsJo2yetgeuFUCKBw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "158316275219-fgkmmud8gl20a9p7v5msmvg1tfnogrvt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
