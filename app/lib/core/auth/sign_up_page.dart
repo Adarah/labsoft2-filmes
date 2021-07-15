@@ -1,5 +1,6 @@
-import 'package:app/modules/auth/sign_in_form.dart';
 import 'package:flutter/material.dart';
+
+import 'sign_in_form.dart';
 
 class SignUpPage extends StatelessWidget {
   const SignUpPage();

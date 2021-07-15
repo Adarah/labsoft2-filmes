@@ -1,10 +1,12 @@
-import 'package:app/components/form_button.dart';
-import 'package:app/components/social_login.dart';
-import 'package:app/modules/auth/auth_service.dart';
-import 'package:app/modules/auth/validators.dart';
+import 'package:app/viewmodels/auth_viewmodel.dart';
+import 'package:app/widgets/form_button.dart';
+import 'package:app/widgets/social_login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
+
+import 'auth_service.dart';
+import 'validators.dart';
 
 class SignInForm extends StatefulWidget with Validator {
   const SignInForm({Key? key}) : super(key: key);
@@ -34,7 +36,7 @@ class _SignInFormState extends State<SignInForm> {
 
   @override
   Widget build(BuildContext context) {
-    final _authService = Provider.of<AuthService>(context, listen: false);
+    final _authModel = Provider.of<AuthViewmodel>(context, listen: false);
     return Form(
       key: _formKey,
       child: Column(
@@ -72,7 +74,7 @@ class _SignInFormState extends State<SignInForm> {
             onPressed: () {
               final _email = _emailControler.text;
               final _password = _passwordControler.text;
-              _authService.signInWithEmailAndPassword(_email, _password);
+              _authModel.signInWithEmailAndPassword(_email, _password);
             },
           ),
           OutlinedButton(

@@ -1,46 +1,49 @@
-import 'package:app/modules/auth/auth_service.dart';
-import 'package:app/modules/home/home_page.dart';
+import 'package:app/core/auth/auth_service.dart';
+import 'package:app/core/navigation/router_delegate.dart';
+import 'package:app/viewmodels/auth_viewmodel.dart';
+import 'package:app/viewmodels/screen_viewmodel.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'components/loading_page.dart';
-import 'components/something_went_wrong_page.dart';
-import 'landing_page.dart';
-import 'modules/auth/sign_in_page.dart';
-import 'modules/auth/sign_up_page.dart';
-import 'modules/reviews/reviews_page.dart';
-
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(App());
 }
 
-/// We are using a StatefulWidget such that we only create the [Future] once,
-/// no matter how many times our widget rebuild.
-/// If we used a [StatelessWidget], in the event where [App] is rebuilt, that
-/// would re-initialize FlutterFire and make our application re-enter loading state,
-/// which is undesired.
 class App extends StatefulWidget {
-  // Create the initialization Future outside of `build`:
   @override
   _AppState createState() => _AppState();
 }
 
 class _AppState extends State<App> {
+  late final MovieRouterDelegate delegate;
+
+  @override
+  void initState() {
+    super.initState();
+    delegate = MovieRouterDelegate();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Filmes App',
-      theme: _filmesAppTheme(),
-      home: LandingPage(),
-      routes: {
-        '/signIn': (context) => SignInPage(),
-        '/signUp': (context) => SignUpPage(),
-        '/home': (context) => HomePage(),
-        '/reviews': (context) => ReviewsPage(),
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AuthViewmodel>(
+          create: (_) => AuthViewmodel(FirebaseAuthService()),
+        ),
+        ChangeNotifierProvider<ScreenViewmodel>(
+          create: (_) => ScreenViewmodel(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Filmes App',
+        theme: _filmesAppTheme(),
+        home: Router(
+          routerDelegate: delegate,
+        ),
+      ),
     );
   }
 

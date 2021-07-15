@@ -1,6 +1,23 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 import 'movie.dart';
 
 class MovieRepository {
+  static Future<List<Movie>> loadRecommendations(String userId) async {
+    final url = Uri.parse('https://labsoft2.adarah.info/recommendations/$userId');
+    final response = await http.get(url);
+    final Map<String, dynamic> body = jsonDecode(response.body);
+    return body['movies'].map((movie) => Movie.fromJson(movie));
+  }
+
+  static Future<List<Movie>> loadReleases() async {
+    final url = Uri.parse('https://labsoft2.adarah.info/releases');
+    final response = await http.get(url);
+    final Map<String, dynamic> body = jsonDecode(response.body);
+    return body['movies'].map((movie) => Movie.fromJson(movie));
+  }
+
   static List<Movie> loadMovies() {
     const allMovies = <Movie>[
       Movie(

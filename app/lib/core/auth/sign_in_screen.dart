@@ -1,8 +1,9 @@
-import 'package:app/modules/auth/sign_in_form.dart';
 import 'package:flutter/material.dart';
 
-class SignInPage extends StatelessWidget {
-  const SignInPage();
+import 'sign_in_form.dart';
+
+class SignInScreen extends StatelessWidget {
+  const SignInScreen();
 
   @override
   Widget build(BuildContext context) {

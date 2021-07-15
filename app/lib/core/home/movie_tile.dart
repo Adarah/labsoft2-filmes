@@ -1,8 +1,7 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'movie.dart';
+import '../../models/movie.dart';
 
 class MovieTile extends StatelessWidget {
   final Movie movie;
@@ -35,9 +34,9 @@ class MovieTile extends StatelessWidget {
                     ),
                     SizedBox(height: 8.0),
                     Text(
-                        'FILME | Ano: ${movie.releaseYear} | Duração: ${movie.duration}'),
-                    Text('Gêneros: ${movie.genres.join('/')}'),
-                    Text('NOTA: ${movie.score} (IMDB)'),
+                        'FILME | ${movie.releaseYear} | ${movie.duration}'),
+                    Text('${movie.genres.join('/')}'),
+                    Text('${movie.score} (IMDB)'),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: movie.streamingServices

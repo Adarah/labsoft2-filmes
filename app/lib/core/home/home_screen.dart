@@ -1,19 +1,18 @@
-import 'dart:math';
-
-import 'package:app/components/navigation_drawer.dart';
-import 'package:app/modules/auth/auth_service.dart';
-import 'package:app/modules/movie/movie_repository.dart';
+import 'package:app/core/auth/auth_service.dart';
+import 'package:app/models/movie_repository.dart';
+import 'package:app/viewmodels/auth_viewmodel.dart';
+import 'package:app/widgets/navigation_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../movie/movie_tile.dart';
+import 'movie_tile.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context, listen: false);
+    final authModel = Provider.of<AuthViewmodel>(context, listen: false);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -64,11 +63,7 @@ class HomePage extends StatelessWidget {
                       )),
                   actions: [
                     IconButton(
-                        onPressed: () {}, icon: Icon(Icons.notifications)),
-                    IconButton(
-                        onPressed: () {}, icon: Icon(Icons.shopping_bag)),
-                    IconButton(
-                        onPressed: authService.signOut,
+                        onPressed: authModel.signOut,
                         icon: Icon(Icons.logout)),
                   ],
                   // The "forceElevated" property causes the SliverAppBar to show

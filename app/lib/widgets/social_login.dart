@@ -1,4 +1,5 @@
-import 'package:app/modules/auth/auth_service.dart';
+import 'package:app/core/auth/auth_service.dart';
+import 'package:app/viewmodels/auth_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,7 +8,7 @@ class SocialLoginButtonRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _authService = Provider.of<AuthService>(context, listen: false);
+    final _authModel = Provider.of<AuthViewmodel>(context, listen: false);
     return ButtonBar(
       alignment: MainAxisAlignment.center,
       children: [
@@ -18,7 +19,7 @@ class SocialLoginButtonRow extends StatelessWidget {
         IconButton(
           icon: Icon(Icons.android),
           onPressed: () {
-            _authService.signInWithGoogle();
+            _authModel.signInWithGoogle();
           },
         ),
         IconButton(
