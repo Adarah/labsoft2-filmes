@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:13
+    volumes:
+      - filmes_data:/var/lib/postgresql/data:Z
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  load_data:
+    build: .
+    entrypoint: ./wait-for-it.sh
+    command:
+      - db:5432
+      - --
+      - python
+      - ./manage.py
+      - loaddata
+      - database.json
+    depends_on:
+      - db
+  web:
+    build: .
+    entrypoint: ./wait-for-it.sh
+    command:
+      - db:5432
+      - --
+      - python
+      - manage.py
+      - runserver
+      - 0.0.0.0:8000
+#    volumes:
+#      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - load_data
+volumes:
+  filmes_data:
