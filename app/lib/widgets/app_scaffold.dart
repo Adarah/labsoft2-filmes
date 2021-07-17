@@ -6,15 +6,16 @@ import 'package:provider/provider.dart';
 import 'navigation_drawer.dart';
 
 class AppScaffold extends StatelessWidget {
-  const AppScaffold({Key? key}) : super(key: key);
+  final String title;
+  final Widget body;
+  const AppScaffold({Key? key, required this.title, required this.body}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final authViewmodel = Provider.of<AuthViewmodel>(context, listen: false);
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('Reviews'),
+        title: Text(title),
         backwardsCompatibility: false,
         systemOverlayStyle: SystemUiOverlayStyle.light,
         actions: [
@@ -25,7 +26,7 @@ class AppScaffold extends StatelessWidget {
         ],
       ),
       drawer: NavigationDrawer(),
-      body: Placeholder(),
+      body: body,
     );
   }
 }

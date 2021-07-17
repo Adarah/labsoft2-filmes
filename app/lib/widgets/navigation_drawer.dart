@@ -1,4 +1,4 @@
-import 'package:app/viewmodels/screen_viewmodel.dart';
+import 'package:app/viewmodels/navigator_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -53,7 +53,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
     screen: Screen,
     icon: Icon,
   }) {
-    return Consumer<ScreenViewmodel>(
+    return Consumer<NavigatorViewmodel>(
       builder: (context, screenModel, child) => ElevatedButton.icon(
         onPressed: () => screenModel.selectedScreen = screen,
         icon: icon,

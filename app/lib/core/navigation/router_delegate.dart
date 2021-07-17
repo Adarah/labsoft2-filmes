@@ -1,6 +1,7 @@
 import 'package:app/core/navigation/pages/linked_accounts_page.dart';
+import 'package:app/core/navigation/pages/movie_details_page.dart';
 import 'package:app/viewmodels/auth_viewmodel.dart';
-import 'package:app/viewmodels/screen_viewmodel.dart';
+import 'package:app/viewmodels/navigator_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,10 +20,10 @@ class MovieRouterDelegate extends RouterDelegate
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<AuthViewmodel, ScreenViewmodel>(
-      builder: (context, auth, screen, child) {
+    return Consumer2<AuthViewmodel, NavigatorViewmodel>(
+      builder: (context, auth, nav, child) {
         List<Page> stack;
-        final selection = screen.selectedScreen;
+        final selection = nav.selectedScreen;
         final authState = auth.authState;
 
         if (authState == AuthState.unknown) {
@@ -31,6 +32,8 @@ class MovieRouterDelegate extends RouterDelegate
           stack = [
             if (selection == Screen.Home)
               HomePage(),
+            if (nav.selectedMovie != null)
+              MovieDetailsPage(movie: nav.selectedMovie!),
             if (selection == Screen.Reviews)
               ReviewPage(),
             if (selection == Screen.LinkedAccounts)

@@ -1,3 +1,4 @@
+import 'package:app/core/linked_accounts/linked_accounts_screen.dart';
 import 'package:flutter/material.dart';
 
 class LinkedAccountsPage extends Page {
@@ -7,7 +8,7 @@ class LinkedAccountsPage extends Page {
   Route createRoute(BuildContext context) {
     return MaterialPageRoute(
       settings: this,
-      builder: (BuildContext context) => Placeholder(),
+      builder: (BuildContext context) => LinkedAccountsScreen(),
     );
   }
 }
