@@ -61,6 +61,17 @@ class UserRecommendations(generics.ListCreateAPIView):
         recommendation.save()
         return queryset
 
+class UserPremieres(generics.ListCreateAPIView):
+    queryset = Movie.objects.all()
+    serializer_class = MovieSerializer
+
+    def get_queryset(self):
+        user = User.objects.get(pk=self.kwargs['user_id'])
+        today = date.today()
+        year = today.year
+        streamings = user.streamings.all()
+        queryset = Movie.objects.filter(streamings__in=streamings, year=year)
+        return queryset
 
 class ListUserRating(generics.ListCreateAPIView):
     queryset = UserRating.objects.all()
