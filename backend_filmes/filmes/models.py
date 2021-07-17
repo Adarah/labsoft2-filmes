@@ -58,3 +58,8 @@ class UserRating(models.Model):
     rating = models.FloatField()
     review = models.TextField()
     created_at = models.DateTimeField()
+
+class RecommendationHistory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    created_at = models.DateTimeField()
