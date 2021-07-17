@@ -1,5 +1,6 @@
 from rest_framework import generics, filters
 import django_filters.rest_framework
+import random
 
 from .models import User, Movie, UserRating
 from .serializers import UserSerializer, MovieSerializer, UserRatingSerializer
@@ -36,6 +37,8 @@ class UserRecommendations(generics.ListCreateAPIView):
         user = User.objects.get(pk=self.kwargs['user_id'])
         streamings = user.streamings.all()
         queryset = Movie.objects.filter(streamings__in=streamings)
+        index = random.randint(0, len(queryset)-2)
+        queryset = queryset[index:index+1]
         return queryset
 
 

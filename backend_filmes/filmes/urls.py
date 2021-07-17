@@ -6,7 +6,6 @@ urlpatterns = [
     url('user', views.ListUser.as_view()),
     url('user/<int:pk>/', views.DetailUser.as_view()),
     url(r'^recommendations/(?P<user_id>[0-9a-zA-Z-]+)$', views.UserRecommendations.as_view()),
-    #url('recommendations/<int:user_id>', views.UserRecommendations.as_view()),
     url('movie', views.ListMovie.as_view()),
     url('movie/<int:pk>/', views.DetailMovie.as_view()),
     url('rating', views.ListUserRating.as_view()),
