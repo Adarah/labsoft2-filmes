@@ -54,15 +54,19 @@ class UserRecommendations(generics.ListCreateAPIView):
         today = date.today()
         past_recommendation = self._check_past_recommendations(user, today)
         if len(past_recommendation) > 0:
-            movie_id = past_recommendation.first().movie.id
-            return Movie.objects.filter(id=movie_id)
+            movie_ids = []
+            for recommendation in past_recommendation:
+                movie_id = recommendation.movie.id
+                movie_ids.append(movie_id)
+            return Movie.objects.filter(id__in=movie_ids)
         streamings = user.streamings.all()
         queryset = Movie.objects.filter(streamings__in=streamings)
-        index = random.randint(0, len(queryset)-2)
-        queryset = queryset[index:index+1]
-        movie = queryset[0]
-        recommendation = RecommendationHistory(user=user, movie=movie, created_at=today)
-        recommendation.save()
+        index = random.randint(0, len(queryset)-5)
+        queryset = queryset[index:index+4]
+        movies = list(queryset)
+        for movie in movies:
+            recommendation = RecommendationHistory(user=user, movie=movie, created_at=today)
+            recommendation.save()
         return queryset
 
 class UserPremieres(generics.ListCreateAPIView):
