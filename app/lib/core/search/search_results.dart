@@ -1,6 +1,5 @@
-import 'package:app/core/home/movie_tile.dart';
+import 'package:app/core/home/home_movie_tile.dart';
 import 'package:app/models/movie.dart';
-import 'package:app/widgets/app_scaffold.dart';
 import 'package:flutter/material.dart';
 
 class SearchResults extends StatelessWidget {
@@ -19,7 +18,7 @@ class SearchResults extends StatelessWidget {
       ),
       body: ListView.builder(
         itemCount: movies.length,
-        itemBuilder: (context, index) => MovieTile(movie: movies[index]),
+        itemBuilder: (context, index) => HomeMovieTile(movie: movies[index]),
       ),
     );
   }

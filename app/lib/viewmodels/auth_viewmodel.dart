@@ -1,6 +1,5 @@
 import 'package:app/core/auth/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 
 enum AuthState {
@@ -50,10 +49,12 @@ class AuthViewmodel with ChangeNotifier {
 
   AuthViewmodel(AuthService authService) : _authService = authService {
     _init();
+    _authService.authStateChanges().listen((event) {
+      _user = event;
+    });
   }
 
   Future<void> _init() async {
-    await Firebase.initializeApp();
     user = _authService.currentUser;
     if (user != null) {
       authState = AuthState.loggedIn;

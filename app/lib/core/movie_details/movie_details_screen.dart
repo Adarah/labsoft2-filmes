@@ -1,4 +1,4 @@
-import 'package:app/core/movie_details/movie_rating_bar.dart';
+import 'package:app/core/reviews/movie_rating_bar.dart';
 import 'package:app/models/movie.dart';
 import 'package:app/viewmodels/navigator_viewmodel.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -70,7 +70,7 @@ class MovieDetailsScreen extends StatelessWidget {
                 Column(
                   children: [
                     Text('Sua nota:'),
-                    MovieRatingBar(movie: movie),
+                    MovieRatingBar(enabled: true, onRatingUpdate: () {}),
                   ],
                 )
               ],

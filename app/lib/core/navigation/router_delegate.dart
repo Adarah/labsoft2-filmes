@@ -30,9 +30,9 @@ class MovieRouterDelegate extends RouterDelegate
         } else if (authState == AuthState.loggedIn) {
           _pages = [
             if (selection == Screen.Home) HomePage(),
+            if (selection == Screen.Reviews) ReviewPage(),
             if (nav.selectedMovie != null)
               MovieDetailsPage(movie: nav.selectedMovie!),
-            if (selection == Screen.Reviews) ReviewPage(),
             if (selection == Screen.LinkedAccounts) LinkedAccountsPage(),
             if (selection == Screen.Profile) ProfilePage(),
           ];

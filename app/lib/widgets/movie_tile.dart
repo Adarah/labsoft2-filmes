@@ -1,15 +1,16 @@
 import 'package:app/viewmodels/navigator_viewmodel.dart';
 import 'package:app/widgets/ink_wrapper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/movie.dart';
+import '../models/movie.dart';
 
 class MovieTile extends StatelessWidget {
   final Movie movie;
+  final List<Widget> children;
 
-  const MovieTile({Key? key, required this.movie}) : super(key: key);
+  const MovieTile({Key? key, required this.movie, required this.children})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,8 @@ class MovieTile extends StatelessWidget {
             return InkWrapper(
               onTap: () {
                 model.selectedMovie = movie;
-              }, child: child!,
+              },
+              child: child!,
             );
           },
           child: Row(
@@ -41,35 +43,18 @@ class MovieTile extends StatelessWidget {
                     children: [
                       Text(
                         movie.title,
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .headline6,
+                        style: Theme.of(context).textTheme.headline6,
                       ),
                       SizedBox(height: 8.0),
-                      Text('FILME | ${movie.releaseYear}'),
-                      Text('${movie.score} (IMDB)'),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: movie.streamingServices
-                            .expand((svc) =>
-                        [
-                          SizedBox(
-                            width: 100.0,
-                            height: 20,
-                            child: svc.logo,
-                          ),
-                        ])
-                            .toList(),
-                      )
+                      ...children
                     ],
                   ),
                 ),
               )
             ],
           ),
-        ),)
-      ,
+        ),
+      ),
     );
   }
 }

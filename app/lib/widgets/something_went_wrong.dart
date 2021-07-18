@@ -1,21 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class SomethingWentWrongPage extends StatelessWidget {
-  const SomethingWentWrongPage();
+class SomethingWentWrong extends StatelessWidget {
+  const SomethingWentWrong();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        // leading: IconButton(
-        //   onPressed: () {},
-        //   icon: Icon(Icons.arrow_back),
-        // ),
-        title: Text('Something went wrong!'),
-        centerTitle: true,
-      ),
-      body: Padding(
+    return Padding(
         padding: const EdgeInsets.all(32.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -42,7 +33,6 @@ class SomethingWentWrongPage extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }

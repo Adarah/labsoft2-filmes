@@ -2,15 +2,12 @@ import 'package:app/core/home/movie_sliver.dart';
 import 'package:app/core/search/search_bar.dart';
 import 'package:app/models/movie.dart';
 import 'package:app/models/movie_repository.dart';
-import 'package:app/models/streaming_service.dart';
 import 'package:app/viewmodels/auth_viewmodel.dart';
-import 'package:app/viewmodels/linked_accounts_viewmodel.dart';
 import 'package:app/widgets/navigation_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
-import 'movie_tile.dart';
+import 'package:async/async.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -20,17 +17,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late final List<Movie> movies;
+  late final AsyncMemoizer<List<Movie>> _recommendationMemoizer;
+  late final AsyncMemoizer<List<Movie>> _premiereMemoizer;
 
   @override
   void initState() {
-    movies = MovieRepository.loadMovies();
     super.initState();
+    _recommendationMemoizer = AsyncMemoizer();
+    _premiereMemoizer = AsyncMemoizer();
   }
 
   @override
   Widget build(BuildContext context) {
-    final authModel = Provider.of<AuthViewmodel>(context, listen: false);
+    final authModel = context.read<AuthViewmodel>();
+    final movieRepo = context.read<MovieRepository>();
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -148,26 +148,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                   context),
                         ),
                         SliverPadding(
-                            padding: const EdgeInsets.all(8.0),
-                            // In this example, the inner scroll view has
-                            // fixed-height list items, hence the use of
-                            // SliverFixedExtentList. However, one could use any
-                            // sliver widget here, e.g. SliverList or SliverGrid.
-                            sliver: Consumer<LinkedAccountsViewmodel>(
-                              builder: (context, model, child) {
-                                final _enabled = model.enabledServices.toSet();
-                                final filteredMovies = movies.where((movie) {
-                                  final services =
-                                      movie.streamingServices.toSet();
-                                  return services
-                                          .intersection(_enabled)
-                                          .length !=
-                                      0;
-                                }).toList();
-                                return MovieSliver(movies: filteredMovies);
-                              },
-                            ) //
-                            ),
+                          padding: const EdgeInsets.all(8.0),
+                          // In this example, the inner scroll view has
+                          // fixed-height list items, hence the use of
+                          // SliverFixedExtentList. However, one could use any
+                          // sliver widget here, e.g. SliverList or SliverGrid.
+                          sliver: Builder(
+                            builder: (context) {
+                              final recommendations = _recommendationMemoizer
+                                  .runOnce(() => movieRepo.loadRecommendations(
+                                      authModel.user!.uid));
+                              // final movies = await moviesRepo.loadRecommendations('1');
+                              return MovieSliver(
+                                moviesFuture: recommendations,
+                              );
+                            },
+                          ),
+                        ),
                       ],
                     );
                   },
@@ -206,9 +203,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           // fixed-height list items, hence the use of
                           // SliverFixedExtentList. However, one could use any
                           // sliver widget here, e.g. SliverList or SliverGrid.
-                          sliver: MovieSliver(
-                            movies: movies,
-                          ),
+                          sliver: Builder(builder: (context) {
+                            return MovieSliver(
+                              moviesFuture: _premiereMemoizer.runOnce(
+                                () => movieRepo.loadReleases(),
+                              ),
+                            );
+                          }),
                         ),
                       ],
                     );

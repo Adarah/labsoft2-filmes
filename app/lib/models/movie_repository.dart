@@ -1,18 +1,26 @@
 import 'dart:convert';
 
 import 'package:app/models/streaming_service.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'movie.dart';
 
 class MovieRepository {
+  // String repoUrl = dotenv.env['BACKEND_URL']!;
+  String repoUrl = 'foobar';
+
   Future<List<Movie>> loadRecommendations(String userId) async {
-    final url = Uri.parse('https://labsoft2.adarah.info/recommendations/$userId');
-    final response = await http.get(url);
-    final Map<String, dynamic> body = jsonDecode(response.body);
-    return body['movies'].map((movie) => Movie.fromJson(movie));
+    await Future.delayed(Duration(seconds: 2));
+    print('awaited recos');
+    return MovieRepository.loadMovies();
+    // final url = Uri.parse('$repoUrl/premieres/$userId');
+    // final response = await http.get(url);
+    // final Map<String, dynamic> body = jsonDecode(response.body);
+    // return body['movies'].map((movie) => Movie.fromJson(movie));
   }
 
   Future<List<Movie>> loadReleases() async {
+    await Future.delayed(Duration(seconds: 2));
     final url = Uri.parse('https://labsoft2.adarah.info/releases');
     final response = await http.get(url);
     final Map<String, dynamic> body = jsonDecode(response.body);
@@ -20,6 +28,11 @@ class MovieRepository {
   }
 
   Future<List<Movie>> search(String searchTerm) async {
+    await Future.delayed(Duration(seconds: 1));
+    return MovieRepository.loadMovies();
+  }
+
+  Future<List<Movie>> loadReviewedMovies(String userId) async {
     await Future.delayed(Duration(seconds: 1));
     return MovieRepository.loadMovies();
   }
