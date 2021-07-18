@@ -55,7 +55,7 @@ class UserRating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     rating = models.FloatField()
-    review = models.TextField()
+    review = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField()
 
 class RecommendationHistory(models.Model):
