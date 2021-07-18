@@ -85,3 +85,10 @@ class ListUserRating(generics.ListCreateAPIView):
 class DetailUserRating(generics.RetrieveUpdateDestroyAPIView):
     queryset = UserRating.objects.all()
     serializer_class = UserRatingSerializer
+    lookup_field = 'user_id'
+
+    def get_queryset(self):
+        user = User.objects.get(pk=self.kwargs['user_id'])
+        movie = Movie.objects.get(pk=self.kwargs['movie_id'])
+        queryset = UserRating.objects.filter(user=user, movie=movie)
+        return queryset

@@ -12,5 +12,5 @@ urlpatterns = [
     path('movie/<int:pk>/', views.DetailMovie.as_view()),
     url('movie_search', views.SearchMovie.as_view()),
     path('rating', views.ListUserRating.as_view()),
-    path('rating/<int:pk>/', views.DetailUserRating.as_view()),
+    path('rating/<str:user_id>/<str:movie_id>', views.DetailUserRating.as_view())
 ]
