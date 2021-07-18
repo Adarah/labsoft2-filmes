@@ -1,13 +1,13 @@
 import 'package:app/models/streaming_service.dart';
 
 class Movie {
-  final int id;
+  final String id;
   final String title;
   final String posterUrl;
   final int releaseYear;
-  final String duration;
+  final int duration;
   final List<String> genres;
-  final double score;
+  final int score;
   final List<StreamingService> streamingServices;
 
   const Movie({
@@ -25,12 +25,14 @@ class Movie {
     return Movie(
       id: json['id'],
       title: json['title'],
-      posterUrl: json['posterUrl'],
+      posterUrl: json['url'],
       releaseYear: json['year'],
-      duration: json['duraton'],
-      genres: json['genres'],
-      score: json['score'],
-      streamingServices: json['streamings'],
+      duration: json['runningTimeInMinutes'],
+      genres: json['genres'].cast<String>(),
+      score: json['metaScore'],
+      streamingServices: (json['streamings'].cast<int>() as List<int>)
+          .map((i) => StreamingService.fromId(i))
+          .toList(),
     );
   }
 }

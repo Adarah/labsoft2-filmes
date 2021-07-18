@@ -1,5 +1,7 @@
 import 'package:app/viewmodels/navigator_viewmodel.dart';
 import 'package:app/widgets/ink_wrapper.dart';
+import 'package:app/widgets/poster_network_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,9 +31,9 @@ class MovieTile extends StatelessWidget {
           },
           child: Row(
             children: [
-              Image.asset(
-                movie.posterUrl,
-                fit: BoxFit.cover,
+              SizedBox(
+                width: 100,
+                child: PosterNetworkImage(url: movie.posterUrl),
               ),
               SizedBox(width: 16.0),
               Expanded(

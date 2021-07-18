@@ -33,11 +33,11 @@ class MovieSliver extends StatelessWidget {
               : SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
-                      // This builder is called for each child.
-                      // In this example, we just number each list item.
-                      final pickedMovie = filteredMovies[index % filteredMovies.length];
+                      // final pickedMovie = filteredMovies[index % filteredMovies.length];
+                      final pickedMovie = filteredMovies[index];
                       return HomeMovieTile(movie: pickedMovie);
                     },
+                    childCount: filteredMovies.length
                   ),
                 );
         }

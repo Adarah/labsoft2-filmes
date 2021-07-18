@@ -206,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           sliver: Builder(builder: (context) {
                             return MovieSliver(
                               moviesFuture: _premiereMemoizer.runOnce(
-                                () => movieRepo.loadReleases(),
+                                () => movieRepo.loadReleases(authModel.user!.uid),
                               ),
                             );
                           }),

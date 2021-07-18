@@ -1,7 +1,9 @@
 import 'package:app/core/reviews/movie_rating_bar.dart';
 import 'package:app/models/movie.dart';
 import 'package:app/viewmodels/navigator_viewmodel.dart';
+import 'package:app/widgets/poster_network_image.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -26,10 +28,7 @@ class MovieDetailsScreen extends StatelessWidget {
           title: Text('Detalhes do filme'),
         ),
         body: SlidingUpPanel(
-          body: Image.asset(
-            movie.posterUrl,
-            fit: BoxFit.cover,
-          ),
+          body: PosterNetworkImage(url: movie.posterUrl),
           panel: Padding(
             padding: const EdgeInsets.fromLTRB(8.0, 40.0, 8.0, 0.0),
             child: Column(
@@ -50,7 +49,7 @@ class MovieDetailsScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.subtitle1,
                     ),
                     Text(
-                      'Duração: ${movie.duration}',
+                      'Duração: ${movie.duration} minutos',
                       style: Theme.of(context).textTheme.subtitle1,
                     ),
                     Text(
@@ -70,7 +69,8 @@ class MovieDetailsScreen extends StatelessWidget {
                 Column(
                   children: [
                     Text('Sua nota:'),
-                    MovieRatingBar(enabled: true, onRatingUpdate: () {}),
+                    MovieRatingBar(
+                        initialRating: 0, enabled: true, onRatingUpdate: () {}),
                   ],
                 )
               ],

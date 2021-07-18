@@ -6,25 +6,24 @@ import 'package:http/http.dart' as http;
 import 'movie.dart';
 
 class MovieRepository {
-  // String repoUrl = dotenv.env['BACKEND_URL']!;
-  String repoUrl = 'foobar';
+  String repoUrl = dotenv.env['BACKEND_URL']!;
+
+  // String repoUrl = 'foobar';
 
   Future<List<Movie>> loadRecommendations(String userId) async {
-    await Future.delayed(Duration(seconds: 2));
-    print('awaited recos');
-    return MovieRepository.loadMovies();
-    // final url = Uri.parse('$repoUrl/premieres/$userId');
-    // final response = await http.get(url);
-    // final Map<String, dynamic> body = jsonDecode(response.body);
-    // return body['movies'].map((movie) => Movie.fromJson(movie));
+    // await Future.delayed(Duration(seconds: 2));
+    final url = Uri.parse('$repoUrl/recommendations/$userId');
+    final response = await http.get(url);
+    final List<dynamic> body = jsonDecode(response.body);
+    return body.map((movie) => Movie.fromJson(movie)).toList();
   }
 
-  Future<List<Movie>> loadReleases() async {
-    await Future.delayed(Duration(seconds: 2));
-    final url = Uri.parse('https://labsoft2.adarah.info/releases');
+  Future<List<Movie>> loadReleases(String userId) async {
+    // await Future.delayed(Duration(seconds: 2));
+    final url = Uri.parse('$repoUrl/premieres/$userId');
     final response = await http.get(url);
-    final Map<String, dynamic> body = jsonDecode(response.body);
-    return body['movies'].map((movie) => Movie.fromJson(movie));
+    final List<dynamic> body = jsonDecode(response.body);
+    return body.map((movie) => Movie.fromJson(movie)).toList();
   }
 
   Future<List<Movie>> search(String searchTerm) async {
@@ -37,47 +36,46 @@ class MovieRepository {
     return MovieRepository.loadMovies();
   }
 
-
   static List<Movie> loadMovies() {
     final allMovies = <Movie>[
       Movie(
-        id: 0,
+        id: "0",
         title: 'O Hobbit: Uma Jornada Inesperada',
         posterUrl: 'assets/images/hobbit.jpg',
         releaseYear: 2012,
-        duration: '3h2m',
+        duration: 182,
         genres: ['Fantasia', 'Aventura'],
-        score: 7.8,
+        score: 78,
         streamingServices: [PrimeVideo()],
       ),
       Movie(
-        id: 1,
+        id: "1",
         title: 'Matrix',
         posterUrl: 'assets/images/matrix.jpg',
         releaseYear: 1999,
-        duration: '2h16m',
+        duration: 136,
         genres: ['Ação', 'Ficção Científica'],
-        score: 8.7,
+        score: 87,
         streamingServices: [Netflix()],
       ),
       Movie(
-        id: 2,
+        id: '2',
         title: 'Star Wars IV: Uma nova Esperaça',
         posterUrl: 'assets/images/star_wars.jpg',
         releaseYear: 1977,
-        duration: '2h1m',
+        duration: 121,
         genres: ['Ação', 'Fantasia', 'Aventura'],
-        score: 8.6,
+        score: 86,
         streamingServices: [DisneyPlus()],
       ),
       Movie(
-        id: 3,
+        id: '3',
         title: 'Bastardos Inglórios',
         posterUrl: 'assets/images/inglorious_bastards.jpg',
         releaseYear: 2009,
-        duration: '2h33m',
+        duration: 153,
         genres: ['Aventura', 'Drama', 'Guerra'],
-        score: 8.3,
+        score: 83,
         streamingServices: [PrimeVideo(), Netflix()],
       ),
     ];

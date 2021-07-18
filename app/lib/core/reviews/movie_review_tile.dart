@@ -11,6 +11,6 @@ class MovieReviewTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MovieTile(movie: movie, children: [MovieRatingBar(enabled: false)]);
+    return MovieTile(movie: movie, children: [MovieRatingBar(initialRating: 0, enabled: false)]);
   }
 }
