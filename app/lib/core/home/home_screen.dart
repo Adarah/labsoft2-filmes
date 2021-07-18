@@ -157,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             builder: (context) {
                               final recommendations = _recommendationMemoizer
                                   .runOnce(() => movieRepo.loadRecommendations(
-                                      authModel.user!.uid));
+                                      authModel.user!.id));
                               // final movies = await moviesRepo.loadRecommendations('1');
                               return MovieSliver(
                                 moviesFuture: recommendations,
@@ -206,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           sliver: Builder(builder: (context) {
                             return MovieSliver(
                               moviesFuture: _premiereMemoizer.runOnce(
-                                () => movieRepo.loadReleases(authModel.user!.uid),
+                                () => movieRepo.loadReleases(authModel.user!.id),
                               ),
                             );
                           }),

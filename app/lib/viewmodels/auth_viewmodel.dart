@@ -1,5 +1,7 @@
 import 'package:app/core/auth/auth_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:app/models/movie_user.dart';
+import 'package:app/models/streaming_service.dart';
+import 'package:app/services/backend_service.dart';
 import 'package:flutter/foundation.dart';
 
 enum AuthState {
@@ -9,11 +11,11 @@ enum AuthState {
 }
 
 class AuthViewmodel with ChangeNotifier {
-  User? _user;
+  MovieUser? _user;
 
-  User? get user => _user;
+  MovieUser? get user => _user;
 
-  set user(User? value) {
+  set user(MovieUser? value) {
     _user = value;
     notifyListeners();
   }
@@ -46,24 +48,25 @@ class AuthViewmodel with ChangeNotifier {
   }
 
   AuthService _authService;
+  BackendService _backendService;
 
-  AuthViewmodel(AuthService authService) : _authService = authService {
-    _init();
-    _authService.authStateChanges().listen((event) {
-      _user = event;
+  AuthViewmodel(
+    AuthService authService,
+    BackendService backendService,
+  )   : _authService = authService,
+        _backendService = backendService {
+    _authService.authStateChanges().listen((movieUser) async {
+      if (movieUser == null) {
+        user = null;
+        authState = AuthState.loggedOut;
+      } else {
+        user = movieUser;
+        authState = AuthState.loggedIn;
+      }
     });
   }
 
-  Future<void> _init() async {
-    user = _authService.currentUser;
-    if (user != null) {
-      authState = AuthState.loggedIn;
-    } else {
-      authState = AuthState.loggedOut;
-    }
-  }
-
-  Future<void> signIn(Future<User?> Function() enter) async {
+  Future<void> signIn(Future<MovieUser?> Function() enter) async {
     signingIn = true;
     final user = await enter();
     signingIn = false;
@@ -86,5 +89,15 @@ class AuthViewmodel with ChangeNotifier {
     await _authService.signOut();
     signinOut = false;
     authState = AuthState.loggedOut;
+  }
+
+  void toggleService(StreamingService svc, bool isEnabled) {
+    final userServices = user!.streamingServices.toSet();
+    if (isEnabled) {
+      userServices.add(svc);
+    } else {
+      userServices.remove(svc);
+    }
+    _backendService.updateStreamingServices(userServices.toList(), user!.id);
   }
 }

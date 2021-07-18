@@ -1,6 +1,8 @@
 import 'package:app/core/auth/auth_service.dart';
 import 'package:app/core/navigation/router_delegate.dart';
 import 'package:app/models/movie_repository.dart';
+import 'package:app/models/user_preferences_service.dart';
+import 'package:app/services/backend_service.dart';
 import 'package:app/viewmodels/auth_viewmodel.dart';
 import 'package:app/viewmodels/linked_accounts_viewmodel.dart';
 import 'package:app/viewmodels/navigator_viewmodel.dart';
@@ -32,16 +34,14 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
+    final authModel = AuthViewmodel(FirebaseAuthService(BackendService()), BackendService());
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthViewmodel>(
-          create: (_) => AuthViewmodel(FirebaseAuthService()),
+          create: (_) => authModel,
         ),
         ChangeNotifierProvider<NavigatorViewmodel>(
           create: (_) => NavigatorViewmodel(),
-        ),
-        ChangeNotifierProvider<LinkedAccountsViewmodel>(
-          create: (_) => LinkedAccountsViewmodel(),
         ),
         Provider<MovieRepository>(
           create: (_) => MovieRepository(),
@@ -61,12 +61,10 @@ class _AppState extends State<App> {
   ThemeData _filmesAppTheme() {
     final base = ThemeData.light();
     return base.copyWith(
-      pageTransitionsTheme: PageTransitionsTheme(
-        builders: {
-          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-        }
-      ),
+      pageTransitionsTheme: PageTransitionsTheme(builders: {
+        TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+      }),
       colorScheme: base.colorScheme.copyWith(
         primary: Colors.orange[800],
         secondary: Colors.white,

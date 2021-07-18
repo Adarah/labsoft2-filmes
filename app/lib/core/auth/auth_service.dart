@@ -1,58 +1,72 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:convert';
+
+import 'package:app/models/movie_user.dart';
+import 'package:app/services/backend_service.dart';
+import 'package:firebase_auth/firebase_auth.dart' as Firebase;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
 
 abstract class AuthService {
-  User? get currentUser;
+  // MovieUser? get currentUser;
 
-  Stream<User?> authStateChanges();
+  Stream<MovieUser?> authStateChanges();
 
-  Future<User?> signInWithEmailAndPassword(String email, String password);
+  Future<MovieUser?> signInWithEmailAndPassword(String email, String password);
 
-  Future<User?> signInWithGoogle();
+  Future<MovieUser?> signInWithGoogle();
 
   Future<void> signOut();
 }
 
 class FirebaseAuthService implements AuthService {
-  final _firebaseAuth = FirebaseAuth.instance;
+  final _firebaseAuth = Firebase.FirebaseAuth.instance;
   var _googleSignIn = GoogleSignIn(scopes: ['email']);
 
-  FirebaseAuthService();
+  BackendService _backendService;
+
+  FirebaseAuthService(BackendService backendService)
+      : _backendService = backendService;
 
   @override
-  get currentUser => _firebaseAuth.currentUser;
-
-  @override
-  Stream<User?> authStateChanges() {
-    return _firebaseAuth.authStateChanges();
+  Stream<MovieUser?> authStateChanges() {
+    return _firebaseAuth.authStateChanges().map((user) {});
   }
 
   @override
-  Future<User?> signInWithEmailAndPassword(
+  Future<MovieUser?> signInWithEmailAndPassword(
       String email, String password) async {
     final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
-    return userCredential.user;
+    return insecureLogin(userCredential.user!);
   }
 
   @override
-  Future<User?> signInWithGoogle() async {
+  Future<MovieUser?> signInWithGoogle() async {
     final googleSignInAcc = await _googleSignIn.signIn();
     if (googleSignInAcc == null) {
       return null;
     }
 
     final googleAuthentication = await googleSignInAcc.authentication;
-    final userCredential =
-        await _firebaseAuth.signInWithCredential(GoogleAuthProvider.credential(
+    final userCredential = await _firebaseAuth
+        .signInWithCredential(Firebase.GoogleAuthProvider.credential(
       idToken: googleAuthentication.idToken,
       accessToken: googleAuthentication.accessToken,
     ));
-    return userCredential.user;
+    return insecureLogin(userCredential.user!);
   }
 
   @override
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
+  }
+
+  Future<MovieUser> insecureLogin(Firebase.User firebaseUser) async {
+    try {
+      return _backendService.login(firebaseUser);
+    } catch (e) {
+      return _backendService.createUser(firebaseUser);
+    }
   }
 }

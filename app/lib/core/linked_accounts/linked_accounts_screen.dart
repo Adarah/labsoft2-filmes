@@ -1,5 +1,5 @@
 import 'package:app/models/streaming_service.dart';
-import 'package:app/viewmodels/linked_accounts_viewmodel.dart';
+import 'package:app/viewmodels/auth_viewmodel.dart';
 import 'package:app/widgets/app_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,7 +26,7 @@ class LinkedAccountsScreen extends StatelessWidget {
 
   Widget _buildStreamingServiceTile(
       BuildContext context, StreamingService svc) {
-    return Consumer<LinkedAccountsViewmodel>(
+    return Consumer<AuthViewmodel>(
       builder: (context, model, child) => Card(
         child: SizedBox(
           width: 5,
@@ -39,7 +39,7 @@ class LinkedAccountsScreen extends StatelessWidget {
               onChanged: (bool value) {
                 model.toggleService(svc, value);
               },
-              value: model.enabledServices.contains(svc),
+              value: model.user!.streamingServices.contains(svc),
             ),
           ),
         ),

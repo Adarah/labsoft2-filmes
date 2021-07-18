@@ -15,26 +15,27 @@ class ReviewScreen extends StatelessWidget {
     final movieRepo = context.read<MovieRepository>();
     final authModel = context.read<AuthViewmodel>();
     return AppScaffold(
-        title: 'Avaliações',
-        body: FutureBuilder<List<Movie>>(
-          future: movieRepo.loadReviewedMovies(authModel.user!.uid),
-          builder: (context, AsyncSnapshot<List<Movie>> snapshot) {
-            if (snapshot.hasError) {
-              return SomethingWentWrong();
-            }
-            if (!snapshot.hasData) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            final movies = snapshot.data!;
-            return ListView.builder(
-              itemCount: movies.length,
-              itemBuilder: (context, index) {
-                return MovieReviewTile(movie: movies[index]);
-              },
+      title: 'Avaliações',
+      body: FutureBuilder<List<Movie>>(
+        future: movieRepo.loadReviewedMovies(authModel.user!.id),
+        builder: (context, AsyncSnapshot<List<Movie>> snapshot) {
+          if (snapshot.hasError) {
+            return SomethingWentWrong();
+          }
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
             );
-          },
-        ));
+          }
+          final movies = snapshot.data!;
+          return ListView.builder(
+            itemCount: movies.length,
+            itemBuilder: (context, index) {
+              return MovieReviewTile(movie: movies[index]);
+            },
+          );
+        },
+      ),
+    );
   }
 }
