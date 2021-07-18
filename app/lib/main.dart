@@ -46,6 +46,9 @@ class _AppState extends State<App> {
         Provider<MovieRepository>(
           create: (_) => MovieRepository(),
         ),
+        Provider<BackendService>(
+          create: (_) => BackendService(),
+        )
       ],
       child: MaterialApp(
         title: 'Filmes App',

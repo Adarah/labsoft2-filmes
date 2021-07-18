@@ -30,7 +30,12 @@ class FirebaseAuthService implements AuthService {
 
   @override
   Stream<MovieUser?> authStateChanges() {
-    return _firebaseAuth.authStateChanges().map((user) {});
+    return _firebaseAuth.authStateChanges().asyncMap((user) async {
+      if (user == null) {
+        return null;
+      }
+      return await _backendService.getUser(user.uid);
+    });
   }
 
   @override
@@ -64,7 +69,7 @@ class FirebaseAuthService implements AuthService {
 
   Future<MovieUser> insecureLogin(Firebase.User firebaseUser) async {
     try {
-      return _backendService.login(firebaseUser);
+      return _backendService.getUser(firebaseUser.uid);
     } catch (e) {
       return _backendService.createUser(firebaseUser);
     }

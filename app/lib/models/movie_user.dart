@@ -14,6 +14,7 @@ class MovieUser {
   });
 
   factory MovieUser.fromJson(Map<String, dynamic> json) {
+    print(json);
     return MovieUser(
         id: json['id'],
         username: json['username'],

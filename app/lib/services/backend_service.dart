@@ -9,9 +9,9 @@ import 'package:firebase_auth/firebase_auth.dart' as Firebase;
 class BackendService {
   final String repoUrl = dotenv.env['BACKEND_URL']!;
 
-  Future<MovieUser> login(Firebase.User firebaseUser) async {
-    final getUseruri = Uri.parse('$repoUrl/user/${firebaseUser.uid}');
-    final response = await http.get(getUseruri);
+  Future<MovieUser> getUser(String id) async {
+    final getUserUri = Uri.parse('$repoUrl/user/$id');
+    final response = await http.get(getUserUri);
     return MovieUser.fromJson(jsonDecode(response.body));
   }
 
@@ -35,12 +35,43 @@ class BackendService {
     return MovieUser.fromJson(jsonDecode(response.body));
   }
 
-  Future<void> updateStreamingServices(
+  Future<MovieUser> updateStreamingServices(
       List<StreamingService> svcs, String userId) async {
-    final uri = Uri.parse('$repoUrl/api/user/$userId');
+    final uri = Uri.parse('$repoUrl/user/$userId');
+    final b =  jsonEncode({'streamings': svcs.map((svc) => svc.id).toList()});
+    print(b);
     final response = await http.patch(
       uri,
-      body: jsonEncode({'streamings': svcs.map((svc) => svc.id)}),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: b,
     );
+    print(response.body);
+    final body = jsonDecode(response.body);
+    print(body);
+    return MovieUser.fromJson(body);
+  }
+
+  Future<void> updateUserRating(String movieId, String userId, double rating) async {
+    final uri = Uri.parse('$repoUrl/rating');
+    final response = await http.post(
+      uri,
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: jsonEncode(
+        {
+          "user": userId,
+          "movie": movieId,
+          "rating": rating,
+          "review": "a",
+          "created_at": DateTime.now().toIso8601String(),
+        },
+      ),
+    );
+    print(response.body);
+    print(movieId);
+    print('finished posting');
   }
 }

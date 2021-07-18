@@ -63,6 +63,12 @@ class AuthViewmodel with ChangeNotifier {
         user = movieUser;
         authState = AuthState.loggedIn;
       }
+      print('in stream');
+      print(user);
+    },
+    onError: (e) {
+      print(e);
+      authState = AuthState.loggedOut;
     });
   }
 
@@ -91,13 +97,13 @@ class AuthViewmodel with ChangeNotifier {
     authState = AuthState.loggedOut;
   }
 
-  void toggleService(StreamingService svc, bool isEnabled) {
+  void toggleService(StreamingService svc, bool isEnabled) async {
     final userServices = user!.streamingServices.toSet();
     if (isEnabled) {
       userServices.add(svc);
     } else {
       userServices.remove(svc);
     }
-    _backendService.updateStreamingServices(userServices.toList(), user!.id);
+    user = await _backendService.updateStreamingServices(userServices.toList(), user!.id);
   }
 }

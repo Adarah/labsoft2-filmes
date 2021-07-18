@@ -1,5 +1,7 @@
 import 'package:app/core/reviews/movie_rating_bar.dart';
 import 'package:app/models/movie.dart';
+import 'package:app/services/backend_service.dart';
+import 'package:app/viewmodels/auth_viewmodel.dart';
 import 'package:app/viewmodels/navigator_viewmodel.dart';
 import 'package:app/widgets/poster_network_image.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -69,8 +71,23 @@ class MovieDetailsScreen extends StatelessWidget {
                 Column(
                   children: [
                     Text('Sua nota:'),
-                    MovieRatingBar(
-                        initialRating: 0, enabled: true, onRatingUpdate: () {}),
+                    Consumer<AuthViewmodel>(
+                      builder: (context, model, child) {
+                        return MovieRatingBar(
+                          initialRating: 0,
+                          enabled: true,
+                          onRatingUpdate: (rating) {
+                            final backendService =
+                                context.read<BackendService>();
+                            backendService.updateUserRating(
+                              movie.id,
+                              model.user!.id,
+                              rating,
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ],
                 )
               ],

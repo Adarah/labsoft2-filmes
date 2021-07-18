@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class MovieRatingBar extends StatefulWidget {
-  final VoidCallback? onRatingUpdate;
+  final Function(double)? onRatingUpdate;
   final bool enabled;
   final double initialRating;
 
@@ -49,7 +49,7 @@ class _MovieRatingBarState extends State<MovieRatingBar> {
         }
         _debounce = Timer(const Duration(seconds: 1), () {
           // TODO: Make backend request to add rating to movie
-          widget.onRatingUpdate!();
+          widget.onRatingUpdate!(rating);
           print(rating);
         });
       },

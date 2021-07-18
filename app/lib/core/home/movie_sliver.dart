@@ -1,5 +1,6 @@
 import 'package:app/models/movie.dart';
 import 'package:app/models/streaming_service.dart';
+import 'package:app/viewmodels/auth_viewmodel.dart';
 import 'package:app/viewmodels/linked_accounts_viewmodel.dart';
 import 'package:app/widgets/something_went_wrong.dart';
 import 'package:flutter/material.dart';
@@ -24,8 +25,8 @@ class MovieSliver extends StatelessWidget {
         }
         if (snapshot.hasData) {
           final movies = snapshot.data!;
-          final model = Provider.of<LinkedAccountsViewmodel>(context);
-          final filteredMovies = _getMoviesFromEnabledServices(movies, model.enabledServices);
+          final model = Provider.of<AuthViewmodel>(context);
+          final filteredMovies = _getMoviesFromEnabledServices(movies, model.user!.streamingServices);
           return filteredMovies.length == 0
               ? SliverToBoxAdapter(
                   child: Text("You don't have any recommendations"),
