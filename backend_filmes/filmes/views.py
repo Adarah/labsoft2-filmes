@@ -1,5 +1,4 @@
 from rest_framework import generics, filters
-from django_filters.rest_framework import DjangoFilterBackend
 import django_filters.rest_framework
 import random
 from datetime import date
@@ -11,9 +10,6 @@ from .serializers import UserSerializer, MovieSerializer, UserRatingSerializer
 class ListUser(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['id']
-
 
 class DetailUser(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
@@ -23,10 +19,14 @@ class DetailUser(generics.RetrieveUpdateDestroyAPIView):
 class ListMovie(generics.ListCreateAPIView):
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
-    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    search_fields = ['title', 'year']
-    filterset_fields = ['id']
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['id', 'title', 'year']
 
+class SearchMovie(generics.ListCreateAPIView):
+    queryset = Movie.objects.all()
+    serializer_class = MovieSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['id', 'title', 'year']
 
 class DetailMovie(generics.RetrieveUpdateDestroyAPIView):
     queryset = Movie.objects.all()
