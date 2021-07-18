@@ -1,4 +1,5 @@
 from django.contrib.postgres.fields import ArrayField
+from django.core.exceptions import ValidationError
 from django.db import models
 
 
@@ -57,6 +58,14 @@ class UserRating(models.Model):
     rating = models.FloatField()
     review = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField()
+
+    def clean(self):
+        movie = self.movie
+        user = self.user
+        repeated_movie_user = UserRating.objects.filter(movie=movie, user=user).exclude(id=self.id)
+        if len(repeated_movie_user) > 0:
+            raise ValidationError('Já existe uma review deste usuário para este filme')
+        super(UserRating, self).clean()
 
 class RecommendationHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
