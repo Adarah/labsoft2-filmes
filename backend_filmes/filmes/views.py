@@ -85,6 +85,14 @@ class ListUserRating(generics.ListCreateAPIView):
     queryset = UserRating.objects.all()
     serializer_class = UserRatingSerializer
 
+    def get_queryset(self):
+        if 'user_id' in self.kwargs:
+            user = User.objects.get(pk=self.kwargs['user_id'])
+            queryset = UserRating.objects.filter(user=user)
+            return queryset
+        else:
+            return User.objects.all()
+
 
 class DetailUserRating(generics.RetrieveUpdateDestroyAPIView):
     queryset = UserRating.objects.all()
