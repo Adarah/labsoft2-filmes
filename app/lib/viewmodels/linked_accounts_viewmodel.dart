@@ -5,8 +5,8 @@ class LinkedAccountsViewmodel with ChangeNotifier {
   // Replace this by network call
   Set<StreamingService> _enabledServices = Set();
   Iterable<StreamingService> get enabledServices => _enabledServices;
-  toggleService(StreamingService service, bool isInsert) {
-    if (isInsert) {
+  toggleService(StreamingService service, bool isEnabled) {
+    if (isEnabled) {
       _enabledServices.add(service);
     } else {
       _enabledServices.remove(service);

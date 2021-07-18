@@ -6,7 +6,12 @@ abstract class StreamingService with EquatableMixin {
   abstract final String name;
   abstract final SvgPicture logo;
 
-  List<Object?> get props => [name, logo];
+  List<Object?> get props => [name];
+
+  @override
+  String toString() {
+    return name;
+  }
 }
 
 class Netflix extends StreamingService {
@@ -16,7 +21,10 @@ class Netflix extends StreamingService {
 
 class DisneyPlus extends StreamingService {
   final String name = 'Disney+';
-  SvgPicture logo = SvgPicture.asset('assets/images/disney_plus_logo.svg');
+  SvgPicture logo = SvgPicture.asset(
+    'assets/images/disney_plus_logo.svg',
+    fit: BoxFit.cover,
+  );
 }
 
 class PrimeVideo extends StreamingService {

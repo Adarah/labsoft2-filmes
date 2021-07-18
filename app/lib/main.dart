@@ -1,7 +1,9 @@
 import 'package:app/core/auth/auth_service.dart';
 import 'package:app/core/navigation/router_delegate.dart';
+import 'package:app/models/movie_repository.dart';
 import 'package:app/viewmodels/auth_viewmodel.dart';
-import 'package:app/viewmodels/screen_viewmodel.dart';
+import 'package:app/viewmodels/linked_accounts_viewmodel.dart';
+import 'package:app/viewmodels/navigator_viewmodel.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -33,15 +35,22 @@ class _AppState extends State<App> {
         ChangeNotifierProvider<AuthViewmodel>(
           create: (_) => AuthViewmodel(FirebaseAuthService()),
         ),
-        ChangeNotifierProvider<ScreenViewmodel>(
-          create: (_) => ScreenViewmodel(),
+        ChangeNotifierProvider<NavigatorViewmodel>(
+          create: (_) => NavigatorViewmodel(),
+        ),
+        ChangeNotifierProvider<LinkedAccountsViewmodel>(
+          create: (_) => LinkedAccountsViewmodel(),
+        ),
+        Provider<MovieRepository>(
+          create: (_) => MovieRepository(),
         ),
       ],
       child: MaterialApp(
         title: 'Filmes App',
         theme: _filmesAppTheme(),
         home: Router(
-          routerDelegate: delegate,
+          routerDelegate: MovieRouterDelegate(),
+          backButtonDispatcher: RootBackButtonDispatcher(),
         ),
       ),
     );
@@ -50,6 +59,12 @@ class _AppState extends State<App> {
   ThemeData _filmesAppTheme() {
     final base = ThemeData.light();
     return base.copyWith(
+      pageTransitionsTheme: PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        }
+      ),
       colorScheme: base.colorScheme.copyWith(
         primary: Colors.orange[800],
         secondary: Colors.white,
@@ -61,8 +76,6 @@ class _AppState extends State<App> {
           ),
         ),
       ),
-      //
-      // )
     );
   }
 }

@@ -1,10 +1,7 @@
-enum StreamingService {
-  netflix,
-  disneyPlus,
-  primeVideo,
-}
+import 'package:app/models/streaming_service.dart';
 
 class Movie {
+  final int id;
   final String title;
   final String posterUrl;
   final int releaseYear;
@@ -14,6 +11,7 @@ class Movie {
   final List<StreamingService> streamingServices;
 
   const Movie({
+    required this.id,
     required this.title,
     required this.posterUrl,
     required this.releaseYear,
@@ -25,6 +23,7 @@ class Movie {
 
   factory Movie.fromJson(Map<String, dynamic> json) {
     return Movie(
+      id: json['id'],
       title: json['title'],
       posterUrl: json['posterUrl'],
       releaseYear: json['year'],

@@ -7,7 +7,7 @@ class ReviewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      title: 'Reviews',
+      title: 'Avaliações',
       body: Placeholder(),
     );
   }

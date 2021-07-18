@@ -11,4 +11,5 @@ class LinkedAccountsPage extends Page {
       builder: (BuildContext context) => LinkedAccountsScreen(),
     );
   }
+
 }

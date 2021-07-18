@@ -1,14 +1,32 @@
-import 'package:app/core/auth/auth_service.dart';
+import 'package:app/core/home/movie_sliver.dart';
+import 'package:app/core/search/search_bar.dart';
+import 'package:app/models/movie.dart';
 import 'package:app/models/movie_repository.dart';
+import 'package:app/models/streaming_service.dart';
 import 'package:app/viewmodels/auth_viewmodel.dart';
+import 'package:app/viewmodels/linked_accounts_viewmodel.dart';
 import 'package:app/widgets/navigation_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'movie_tile.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  late final List<Movie> movies;
+
+  @override
+  void initState() {
+    movies = MovieRepository.loadMovies();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +50,11 @@ class HomeScreen extends StatelessWidget {
                 // This is not necessary if the "headerSliverBuilder" only builds
                 // widgets that do not overlap the next sliver.
                 handle:
-                NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                 sliver: SliverAppBar(
                   automaticallyImplyLeading: false,
                   backwardsCompatibility: false,
+                  systemOverlayStyle: SystemUiOverlayStyle.light,
                   title: const Text('Página inicial'),
                   // This is the title in the app bar.
                   pinned: true,
@@ -49,22 +68,15 @@ class HomeScreen extends StatelessWidget {
                   ),
                   flexibleSpace: FlexibleSpaceBar(
                       background: Align(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Busque aqui por um filme ou série',
-                              filled: true,
-                              fillColor: Colors.white,
-                              suffix: Icon(Icons.search),
-                            ),
-                          ),
-                        ),
-                      )),
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: SearchBar(),
+                    ),
+                  )),
                   actions: [
                     IconButton(
-                        onPressed: authModel.signOut,
-                        icon: Icon(Icons.logout)),
+                        onPressed: authModel.signOut, icon: Icon(Icons.logout)),
                   ],
                   // The "forceElevated" property causes the SliverAppBar to show
                   // a shadow. The "innerBoxIsScrolled" parameter is true when the
@@ -132,27 +144,30 @@ class HomeScreen extends StatelessWidget {
                           // This is the flip side of the SliverOverlapAbsorber
                           // above.
                           handle:
-                          NestedScrollView.sliverOverlapAbsorberHandleFor(
-                              context),
+                              NestedScrollView.sliverOverlapAbsorberHandleFor(
+                                  context),
                         ),
                         SliverPadding(
-                          padding: const EdgeInsets.all(8.0),
-                          // In this example, the inner scroll view has
-                          // fixed-height list items, hence the use of
-                          // SliverFixedExtentList. However, one could use any
-                          // sliver widget here, e.g. SliverList or SliverGrid.
-                          sliver: SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                                  (BuildContext context, int index) {
-                                // This builder is called for each child.
-                                // In this example, we just number each list item.
-                                    final _movies = MovieRepository.loadMovies();
-                                    final pickedMovie = _movies[index % _movies.length];
-                                return MovieTile(movie: pickedMovie);
+                            padding: const EdgeInsets.all(8.0),
+                            // In this example, the inner scroll view has
+                            // fixed-height list items, hence the use of
+                            // SliverFixedExtentList. However, one could use any
+                            // sliver widget here, e.g. SliverList or SliverGrid.
+                            sliver: Consumer<LinkedAccountsViewmodel>(
+                              builder: (context, model, child) {
+                                final _enabled = model.enabledServices.toSet();
+                                final filteredMovies = movies.where((movie) {
+                                  final services =
+                                      movie.streamingServices.toSet();
+                                  return services
+                                          .intersection(_enabled)
+                                          .length !=
+                                      0;
+                                }).toList();
+                                return MovieSliver(movies: filteredMovies);
                               },
+                            ) //
                             ),
-                          ),
-                        ),
                       ],
                     );
                   },
@@ -182,8 +197,8 @@ class HomeScreen extends StatelessWidget {
                           // This is the flip side of the SliverOverlapAbsorber
                           // above.
                           handle:
-                          NestedScrollView.sliverOverlapAbsorberHandleFor(
-                              context),
+                              NestedScrollView.sliverOverlapAbsorberHandleFor(
+                                  context),
                         ),
                         SliverPadding(
                           padding: const EdgeInsets.all(8.0),
@@ -191,25 +206,8 @@ class HomeScreen extends StatelessWidget {
                           // fixed-height list items, hence the use of
                           // SliverFixedExtentList. However, one could use any
                           // sliver widget here, e.g. SliverList or SliverGrid.
-                          sliver: SliverFixedExtentList(
-                            // The items in this example are fixed to 48 pixels
-                            // high. This matches the Material Design spec for
-                            // ListTile widgets.
-                            itemExtent: 48.0,
-                            delegate: SliverChildBuilderDelegate(
-                                  (BuildContext context, int index) {
-                                // This builder is called for each child.
-                                // In this example, we just number each list item.
-                                return ListTile(
-                                  title: Text('Item $index'),
-                                );
-                              },
-                              // The childCount of the SliverChildBuilderDelegate
-                              // specifies how many children this inner list
-                              // has. In this example, each tab has a list of
-                              // exactly 30 items, but this is arbitrary.
-                              childCount: 30,
-                            ),
+                          sliver: MovieSliver(
+                            movies: movies,
                           ),
                         ),
                       ],
