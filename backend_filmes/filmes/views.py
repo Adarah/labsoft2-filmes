@@ -1,4 +1,5 @@
 from rest_framework import generics, filters
+from django.http import HttpResponse
 import django_filters.rest_framework
 import random
 from datetime import date
@@ -81,6 +82,20 @@ class UserPremieres(generics.ListCreateAPIView):
         queryset = Movie.objects.filter(streamings__in=streamings, year=year)
         return queryset
 
+class DetailUserRating(generics.RetrieveUpdateDestroyAPIView):
+    queryset = UserRating.objects.all()
+    serializer_class = UserRatingSerializer
+    lookup_field = 'user_id'
+
+    def get_queryset(self):
+        user = User.objects.get(pk=self.kwargs['user_id'])
+        movie = Movie.objects.get(pk=self.kwargs['movie_id'])
+        queryset = UserRating.objects.filter(user=user, movie=movie)
+        return queryset
+
+    def patch(self, request):
+        return super().patch(request)
+
 class ListUserRating(generics.ListCreateAPIView):
     queryset = UserRating.objects.all()
     serializer_class = UserRatingSerializer
@@ -93,14 +108,11 @@ class ListUserRating(generics.ListCreateAPIView):
         else:
             return User.objects.all()
 
-
-class DetailUserRating(generics.RetrieveUpdateDestroyAPIView):
-    queryset = UserRating.objects.all()
-    serializer_class = UserRatingSerializer
-    lookup_field = 'user_id'
-
-    def get_queryset(self):
-        user = User.objects.get(pk=self.kwargs['user_id'])
-        movie = Movie.objects.get(pk=self.kwargs['movie_id'])
-        queryset = UserRating.objects.filter(user=user, movie=movie)
-        return queryset
+    def post(self, request, user_id):
+        movie = Movie.objects.get(id=request.POST['movie'])
+        user = User.objects.get(pk=user_id)
+        rating = UserRating.objects.filter(user=user, movie=movie)
+        if len(rating) > 0:
+            return DetailUserRating(kwargs={'user_id':user_id,'movie_id':request.POST['movie']}, format_kwarg=None, request=request).patch(request)
+        return super().post(request, user_id)
+        
