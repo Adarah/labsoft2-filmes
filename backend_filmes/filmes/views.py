@@ -11,7 +11,6 @@ class ListUser(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-
 class DetailUser(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -23,6 +22,11 @@ class ListMovie(generics.ListCreateAPIView):
     filter_backends = [filters.SearchFilter]
     search_fields = ['id', 'title', 'year']
 
+class SearchMovie(generics.ListCreateAPIView):
+    queryset = Movie.objects.all()
+    serializer_class = MovieSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['id', 'title', 'year']
 
 class DetailMovie(generics.RetrieveUpdateDestroyAPIView):
     queryset = Movie.objects.all()
