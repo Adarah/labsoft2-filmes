@@ -43,11 +43,13 @@ class _SearchResultsState extends State<SearchResults> {
             if (!snapshot.hasData) {
               return Center(child: CircularProgressIndicator());
             }
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) =>
-                  HomeMovieTile(movie: snapshot.data![index]),
-            );
+            return snapshot.data!.length == 0
+                ? Text('Nenhum filme encontrado')
+                : ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) =>
+                        HomeMovieTile(movie: snapshot.data![index]),
+                  );
           },
         ),
       ),
