@@ -12,5 +12,6 @@ urlpatterns = [
     path('movie/<int:pk>', views.DetailMovie.as_view()),
     url('movie_search', views.SearchMovie.as_view()),
     url(r'^rating/(?P<user_id>[0-9a-zA-Z-]+)$', views.ListUserRating.as_view()),
+    url(r'^post_rating/(?P<user_id>[0-9a-zA-Z-]+)$', views.PostUserRating.as_view()),
     path('rating/<str:user_id>/<str:movie_id>', views.DetailUserRating.as_view())
 ]

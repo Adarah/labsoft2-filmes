@@ -5,7 +5,7 @@ import random
 from datetime import date
 
 from .models import User, Movie, UserRating, RecommendationHistory
-from .serializers import UserSerializer, MovieSerializer, UserRatingSerializer
+from .serializers import UserSerializer, MovieSerializer, UserRatingSerializer, SingleUserRatingSerializer
 
 
 class ListUser(generics.ListCreateAPIView):
@@ -107,6 +107,10 @@ class ListUserRating(generics.ListCreateAPIView):
             return queryset
         else:
             return User.objects.all()
+
+class PostUserRating(generics.ListCreateAPIView):
+    queryset = UserRating.objects.all()
+    serializer_class = SingleUserRatingSerializer
 
     def post(self, request, user_id):
         movie = Movie.objects.get(id=request.POST['movie'])
