@@ -55,3 +55,15 @@ class UserRatingSerializer(serializers.ModelSerializer):
 
         model = UserRating
         depth = 1
+
+class SingleUserRatingSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = (
+            'user',
+            'movie',
+            'rating',
+            'review',
+            'created_at'
+        )
+
+        model = UserRating
