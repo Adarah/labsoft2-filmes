@@ -70,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       background: Align(
                     alignment: Alignment.center,
                     child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 50.0),
                       child: SearchBar(),
                     ),
                   )),

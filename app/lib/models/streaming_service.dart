@@ -54,5 +54,5 @@ class PrimeVideo extends StreamingService {
 
 class HboMax extends StreamingService {
   HboMax()
-      : super(4, 'HBO Max', SvgPicture.asset('assets/images/netflix_logo.svg'));
+      : super(4, 'HBO Max', SvgPicture.asset('assets/images/hbo_max_logo.svg'));
 }

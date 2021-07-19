@@ -19,15 +19,12 @@ class BackendService {
     final postUserUri = Uri.parse('$repoUrl/user');
     final response = await http.post(
       postUserUri,
-      headers: {
-        'Content-type': 'application/json'
-      },
+      headers: {'Content-type': 'application/json'},
       body: jsonEncode(
         {
           'id': firebaseUser.uid,
           'email': firebaseUser.email,
           'username': firebaseUser.email,
-          'age': 18,
           'streamings': [1, 2, 3, 4],
         },
       ),
@@ -38,7 +35,7 @@ class BackendService {
   Future<MovieUser> updateStreamingServices(
       List<StreamingService> svcs, String userId) async {
     final uri = Uri.parse('$repoUrl/user/$userId');
-    final b =  jsonEncode({'streamings': svcs.map((svc) => svc.id).toList()});
+    final b = jsonEncode({'streamings': svcs.map((svc) => svc.id).toList()});
     print(b);
     final response = await http.patch(
       uri,
@@ -53,25 +50,33 @@ class BackendService {
     return MovieUser.fromJson(body);
   }
 
-  Future<void> updateUserRating(String movieId, String userId, double rating) async {
-    final uri = Uri.parse('$repoUrl/rating');
+  Future<double> getMovieRating(String movieId, String userId) async {
+    final uri = Uri.parse('$repoUrl/rating/$userId/$movieId');
+    print(uri);
+    final response = await http.get(uri);
+    final body = jsonDecode(response.body);
+    print('body is ${body}');
+    if (body['detail'] != null) {
+      return 0;
+    }
+    if (body['rating'] is String) {
+      throw Exception('esperate double');
+    }
+    return body['rating'];
+  }
+
+  Future<void> updateUserRating(
+      String movieId, String userId, double rating) async {
+    final uri = Uri.parse('$repoUrl/post_rating/$userId');
     final response = await http.post(
       uri,
-      headers: {
-        'Content-type': 'application/json'
+      body: {
+        "user": userId,
+        "movie": movieId,
+        "rating": rating.toString(),
+        "created_at": DateTime.now().toIso8601String(),
       },
-      body: jsonEncode(
-        {
-          "user": userId,
-          "movie": movieId,
-          "rating": rating,
-          "review": "a",
-          "created_at": DateTime.now().toIso8601String(),
-        },
-      ),
     );
     print(response.body);
-    print(movieId);
-    print('finished posting');
   }
 }

@@ -25,11 +25,10 @@ class _SearchBarState extends State<SearchBar> {
     return TextField(
       controller: _controller,
       onSubmitted: (searchTerm) async {
-        final movies = await repo.search(searchTerm);
         _controller.clear();
         Navigator.of(context).push(MaterialPageRoute(
           fullscreenDialog: true,
-            builder: (context) => SearchResults(movies: movies)));
+            builder: (context) => SearchResults(searchTerm: searchTerm)));
       },
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.go,

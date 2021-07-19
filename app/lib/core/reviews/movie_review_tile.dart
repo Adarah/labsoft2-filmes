@@ -1,16 +1,18 @@
 import 'package:app/widgets/movie_tile.dart';
-import 'package:app/models/movie.dart';
 import 'package:flutter/material.dart';
 
 import 'movie_rating_bar.dart';
+import 'movie_reviews.dart';
 
 class MovieReviewTile extends StatelessWidget {
-  final Movie movie;
+  final MovieReview review;
 
-  const MovieReviewTile({Key? key, required this.movie}) : super(key: key);
+  const MovieReviewTile({Key? key, required this.review}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MovieTile(movie: movie, children: [MovieRatingBar(initialRating: 0, enabled: false)]);
+    return MovieTile(movie: review.movie, children: [
+      MovieRatingBar(initialRating: review.rating, enabled: false)
+    ]);
   }
 }

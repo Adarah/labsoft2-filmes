@@ -47,10 +47,9 @@ class _MovieRatingBarState extends State<MovieRatingBar> {
         if (_debounce?.isActive ?? false) {
           _debounce?.cancel();
         }
-        _debounce = Timer(const Duration(seconds: 1), () {
+        _debounce = Timer(const Duration(milliseconds: 400), () {
           // TODO: Make backend request to add rating to movie
           widget.onRatingUpdate!(rating);
-          print(rating);
         });
       },
     );

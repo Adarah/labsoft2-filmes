@@ -4,6 +4,7 @@ import 'package:app/services/backend_service.dart';
 import 'package:app/viewmodels/auth_viewmodel.dart';
 import 'package:app/viewmodels/navigator_viewmodel.dart';
 import 'package:app/widgets/poster_network_image.dart';
+import 'package:app/widgets/something_went_wrong.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -71,18 +72,29 @@ class MovieDetailsScreen extends StatelessWidget {
                 Column(
                   children: [
                     Text('Sua nota:'),
-                    Consumer<AuthViewmodel>(
-                      builder: (context, model, child) {
-                        return MovieRatingBar(
-                          initialRating: 0,
-                          enabled: true,
-                          onRatingUpdate: (rating) {
-                            final backendService =
-                                context.read<BackendService>();
-                            backendService.updateUserRating(
-                              movie.id,
-                              model.user!.id,
-                              rating,
+                    Consumer2<AuthViewmodel, BackendService>(
+                      builder: (context, model, svc, child) {
+                        return FutureBuilder(
+                          future: svc.getMovieRating(movie.id, model.user!.id),
+                          builder: (context, AsyncSnapshot<double> snapshot) {
+                            if (snapshot.hasError) {
+                              return SomethingWentWrong();
+                            }
+                            if (!snapshot.hasData) {
+                              return Center(child: CircularProgressIndicator());
+                            }
+                            return MovieRatingBar(
+                              initialRating: snapshot.data!,
+                              enabled: true,
+                              onRatingUpdate: (rating) {
+                                final backendService =
+                                    context.read<BackendService>();
+                                backendService.updateUserRating(
+                                  movie.id,
+                                  model.user!.id,
+                                  rating,
+                                );
+                              },
                             );
                           },
                         );

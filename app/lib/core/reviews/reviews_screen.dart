@@ -7,6 +7,8 @@ import 'package:app/widgets/something_went_wrong.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'movie_reviews.dart';
+
 class ReviewScreen extends StatelessWidget {
   const ReviewScreen({Key? key}) : super(key: key);
 
@@ -16,9 +18,9 @@ class ReviewScreen extends StatelessWidget {
     final authModel = context.read<AuthViewmodel>();
     return AppScaffold(
       title: 'Avaliações',
-      body: FutureBuilder<List<Movie>>(
+      body: FutureBuilder<List<MovieReview>>(
         future: movieRepo.loadReviewedMovies(authModel.user!.id),
-        builder: (context, AsyncSnapshot<List<Movie>> snapshot) {
+        builder: (context, AsyncSnapshot<List<MovieReview>> snapshot) {
           if (snapshot.hasError) {
             return SomethingWentWrong();
           }
@@ -27,11 +29,11 @@ class ReviewScreen extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
-          final movies = snapshot.data!;
+          final reviews = snapshot.data!;
           return ListView.builder(
-            itemCount: movies.length,
+            itemCount: reviews.length,
             itemBuilder: (context, index) {
-              return MovieReviewTile(movie: movies[index]);
+              return MovieReviewTile(review: reviews[index]);
             },
           );
         },
