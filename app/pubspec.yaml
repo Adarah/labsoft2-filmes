@@ -33,7 +33,13 @@ dependencies:
   google_sign_in: ^5.0.4
   flutter_svg: ^0.22.0
   provider: ^5.0.0
+  http: ^0.13.3
+  equatable: ^2.0.3
+  sliding_up_panel: ^2.0.0+1
   auto_size_text: ^3.0.0-nullsafety.0
+  flutter_rating_bar: ^4.0.0
+  flutter_dotenv: ^5.0.0
+  cached_network_image: ^3.1.0
 
 dev_dependencies:
   flutter_test:
@@ -53,6 +59,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
