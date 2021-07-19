@@ -54,3 +54,4 @@ class UserRatingSerializer(serializers.ModelSerializer):
         )
 
         model = UserRating
+        depth = 1
